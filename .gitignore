@@ -1,0 +1,7 @@
+backend/.vs/
+backend/bin/
+backend/obj/
+frontend/node_modules/
+*.db
+*.db-shm
+*.db-wal

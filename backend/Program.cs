@@ -22,6 +22,11 @@ var app = builder.Build();
 
 app.MapGet("/api/test", () => new {message = "Backend is working"});
 
+app.MapGet("/users", async (AppDbContext db) =>
+{
+    return await db.Users.ToListAsync();
+});
+
 //Use CORS
 app.UseCors("AllowAll");
 

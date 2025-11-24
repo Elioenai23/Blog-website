@@ -7,7 +7,11 @@ namespace backend.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+        //Users
         public DbSet<User> Users { get; set; }
+
+       //Post
+       public DbSet<Post> Posts { get; set; }
 
     }
 
