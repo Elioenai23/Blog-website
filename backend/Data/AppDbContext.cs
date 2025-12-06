@@ -13,6 +13,12 @@ namespace backend.Data
        //Post
        public DbSet<Post> Posts { get; set; }
 
+        //Likes
+        public DbSet<Like> Likes { get; set; }
+
+        //Comments
+        public DbSet<Comment> Comments { get; set; }
+
     }
 
    
