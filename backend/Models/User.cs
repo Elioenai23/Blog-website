@@ -19,5 +19,8 @@ namespace backend.Models
         //Likes and Comments
         public List<Like> Likes { get; set; } = new();
         public List<Comment> Comments { get; set; }=new();
+
+        public List<Subscription> Subscribers { get; set; } = new();
+        public List<Subscription> SubscribedTo { get; set; } = new();
     }
 }
