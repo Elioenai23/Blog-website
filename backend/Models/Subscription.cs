@@ -1,16 +1,19 @@
-using backend.Models
+using System;
 
-    public class Subscription
+namespace backend.Models
 {
-    public int Id { get; set; }
-    
-    public int SubscriberId { get; set; }
+    public class Subscription
+    {
+        public int Id { get; set; }
 
-    public User Subscriber { get; set; }
+        // Subscriber User Fk
+        public int SubscriberId { get; set; }
+        public User Subscriber { get; set; } = null!;
 
-    public int SubscribedToId { get; set; }
+        // SubscribedTo User Fk
+        public int SubscribedToId { get; set; }
+        public User SubscribedTo { get; set; } = null!;
 
-    public User SubscribedTo { get; set; }
-
-    public DateTime SubscribedOn { get; set; }
+        public DateTime SubscribedOn { get; set; } = DateTime.UtcNow;
+    }
 }

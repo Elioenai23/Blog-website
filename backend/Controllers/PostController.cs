@@ -13,7 +13,7 @@ public class PostController : ControllerBase
     
     public PostController(AppDbContext context)
     {
-        _db = _db;
+        _db = context;
     }
 
     [HttpGet]

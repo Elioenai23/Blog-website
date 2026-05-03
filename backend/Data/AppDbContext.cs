@@ -19,7 +19,23 @@ namespace backend.Data
         //Comments
         public DbSet<Comment> Comments { get; set; }
 
-    }
 
-   
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Subscription>()
+                .HasOne(s => s.Subscriber)
+                .WithMany(u => u.SubscribedTo)
+                .HasForeignKey(s => s.SubscriberId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Subscription>()
+                .HasOne(s => s.SubscribedTo)
+                .WithMany(u => u.Subscribers)
+                .HasForeignKey(s => s.SubscribedToId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
+    }
 }

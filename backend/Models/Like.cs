@@ -2,14 +2,21 @@ using backend.Models;
 using Microsoft.Win32;
 using System.Threading;
 
-public class Like
+
+namespace backend.Models
 {
-    public int Id { get; set; }
+    public class Like
+    {
+        public int Id { get; set; }
 
-    public int UserId { get; set; }
-    public User User { get; set; }
+        //User Fk
+        public int UserId { get; set; }
+        public User User { get; set; } = null!;
 
-    public int PostId { get; set; }
-    public Post Post { get; set; }
+        //Post Fk
+        public int PostId { get; set; }
+        public Post Post { get; set; } = null!;
 
+        public bool isLiked { get; set; } = true;
+    }
 }
