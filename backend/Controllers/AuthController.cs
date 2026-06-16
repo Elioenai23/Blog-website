@@ -1,14 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-using backend.Data;
-using Microsoft.EntityFrameworkCore;
-using backend.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using backend.DTOs;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
+using backend.Services;
+using Microsoft.AspNetCore.Mvc;
 
 
 [ApiController]
@@ -16,86 +8,37 @@ using System.IdentityModel.Tokens.Jwt;
 
 public class AuthController : ControllerBase
 {
-    private readonly AppDbContext _context;
-    private readonly IConfiguration _configuration;
+    private readonly IAuthService _authService;
 
-    public AuthController(AppDbContext context, IConfiguration configuration)
+    public AuthController(IAuthService authService)
     {
-        _context = context;
-        _configuration = configuration;
+        _authService = authService;
     }
+
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
-        var user = new User
+        try
         {
-            Name = dto.Name,
-            Email = dto.Email,
-            PasswordHash = hashedPassword
-        };
-
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-
-        return Ok(new { message = "User registered successfully" });
+            var message = await _authService.RegisterAsync(dto);
+            return Ok(new { message });
+        }
+        catch (Exception ex) 
+        { 
+               return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+        var result = await _authService.LoginAsync(dto);
 
-
-        if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+        if (result == null)
             return Unauthorized(new { message = "Invalid email or password" });
 
-        var token = GenerateJwtToken(user);
-
-        return Ok(new { token });
+        return Ok(result);
     }
 
-    private string GenerateJwtToken(User user)
-    {
-        var jwtSettings = _configuration.GetSection("Jwt");
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
-
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Name),
-            new Claim(ClaimTypes.Email, user.Email)
-        };
-        var token = new JwtSecurityToken(
-            issuer: jwtSettings["Issuer"],
-            audience: jwtSettings["Audience"],
-            claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(double.Parse(jwtSettings["DurationInMinutes"])),
-
-            signingCredentials: creds
-        );
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
-    [Authorize]
-    [HttpPost]
-    public async Task<IActionResult> CreatePost(PostDto dto)
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        var post = new Post
-        {
-            Title = dto.Title,
-            Content = dto.Content,
-            UserId = int.Parse(userId)
-        };
-
-        _context.Posts.Add(post);
-        await _context.SaveChangesAsync();
-
-        return Ok(post);
-    }
 }

@@ -1,4 +1,5 @@
 using backend.Data;
+using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -36,6 +37,10 @@ builder.Services.AddAuthorization();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=app.db"));
 
+//Services
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPostService, PostService>();
+
 //Controllers
 builder.Services.AddControllers();
 
@@ -49,6 +54,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+//Use CORS
+app.UseCors("AllowAll");
+
+//Use Authentication and Authorization
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapGet("/api/test", () => new {message = "Backend is working"});
 
 app.MapGet("/users", async (AppDbContext db) =>
@@ -56,14 +68,8 @@ app.MapGet("/users", async (AppDbContext db) =>
     return await db.Users.ToListAsync();
 });
 
-//Use CORS
-app.UseCors("AllowAll");
 
 //Map Controllers
 app.MapControllers();
-
-//Use Authentication and Authorization
-app.UseAuthentication();
- app.UseAuthorization();
 
 app.Run();

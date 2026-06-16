@@ -10,15 +10,12 @@ namespace backend.Models
         public string Name { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;  
-
-        //Password Field
-        public string Password { get; set; } = string.Empty;   
         
         //Password Hash
         public string PasswordHash { get; set; } = string.Empty;
 
         //Personal User Bio
-        public string Bio { get; set; } = string.Empty;
+        public string Bios { get; set; } = string.Empty;
 
         //Posts
         public List<Post> Posts { get; set; } = new List<Post>();
