@@ -6,7 +6,7 @@ using backend.Models;
 namespace backendApp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[users]")]
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -33,6 +33,17 @@ namespace backendApp.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(user);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound("User not found");
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return Ok("User deleted successfully");
         }
     }
 }

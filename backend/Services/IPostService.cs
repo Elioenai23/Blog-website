@@ -1,5 +1,4 @@
 using backend.DTOs;
-using System.Security.Claims;
 
 namespace backend.Services 
 { 
@@ -7,5 +6,5 @@ namespace backend.Services
     {
         Task<List<PostResponseDto>> GetPostsAsync();
         Task<PostResponseDto> CreatePostAsync(PostDto dto, int userId);
-    }
+        Task<bool> DeletePostAsync(int id, int userId );    }
 }

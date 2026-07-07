@@ -58,6 +58,19 @@ namespace backend.Services
                 LikeCount = 0,
                 CommentCount = 0
             };
+
+        }
+        public async Task<bool> DeletePostAsync(int postId, int userId)
+        {
+            var post = await _db.Posts.FindAsync(postId);
+            if (post == null || post.UserId != userId)
+            {
+                return false;
+            }
+
+            _db.Posts.Remove(post);
+            await _db.SaveChangesAsync();
+            return true;
         }
     }
 }
