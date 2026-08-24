@@ -1,13 +1,9 @@
 namespace backend.DTOs
-
-
 {
-    public class UserResponseDto
+    public class UserDto
     {
-        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Bios { get; set; } = string.Empty;
+        public int? userId { get; set; } = null;
     }
 }
-    

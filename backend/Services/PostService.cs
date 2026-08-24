@@ -71,6 +71,9 @@ namespace backend.Services
             _db.Posts.Remove(post);
             await _db.SaveChangesAsync();
             return true;
+
+           
         }
+        
     }
 }

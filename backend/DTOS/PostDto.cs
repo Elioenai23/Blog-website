@@ -4,6 +4,6 @@ namespace backend.DTOs
     {
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
-        public int? Id { get; set; } = null;
+        public int? postId { get; set; } = null;
     }
 }
