@@ -22,6 +22,7 @@ namespace backend.Services
                     Id = u.Id,
                     Name = u.Name,
                     Email = u.Email,
+                    Bios = u.Bios,
                     
                 })
                 .ToListAsync();
@@ -31,15 +32,18 @@ namespace backend.Services
             var user = new User
             {
                 Name = dto.Name,
-                Email = dto.Email
+                Email = dto.Email,
+                Bios = dto.Bios,
             };
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
+
             return new UserResponseDto
             {
                 Id = user.Id,
                 Name = user.Name,
-                Email = user.Email
+                Email = user.Email,
+                Bios = user.Bios
             };
         }
         public async Task<bool> DeleteUserAsync(int id)

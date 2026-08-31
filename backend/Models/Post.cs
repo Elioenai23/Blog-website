@@ -11,7 +11,7 @@ namespace backend.Models
         public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.UtcNow;
 
         //Post Description
-        public string? Description { get; set; } = string.Empty; //optional preview text
+        public string Description { get; set; } = string.Empty; //optional preview text
 
         //User Fk
         public int UserId { get; set; }

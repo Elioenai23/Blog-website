@@ -34,13 +34,35 @@ namespace backend.Services
                 .ToListAsync();
         }
 
+        public async Task<PostResponseDto?> GetPostByIdAsync(int id)
+        {
+            return await _db.Posts
+                .Include(p => p.User)
+                .Include(p => p.Likes)
+                .Include(p => p.Comments)
+                .Where(p => p.Id == id)
+                .Select(p => new PostResponseDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Description = p.Description,
+                    Content = p.Content,
+                    DateCreated = p.DateCreated,
+                    AuthorName = p.User.Name,
+                    LikeCount = p.Likes.Count,
+                    CommentCount = p.Comments.Count
+                })
+        .FirstOrDefaultAsync();
+      
+        }
         public async Task<PostResponseDto> CreatePostAsync(PostDto dto, int userId)
         {
             var post = new Post
             {
                 Title = dto.Title,
                 Content = dto.Content,
-                UserId = userId
+                UserId = userId,
+                Description = dto.Description
             };
 
             _db.Posts.Add(post);
@@ -52,6 +74,7 @@ namespace backend.Services
             {
                 Id = post.Id,
                 Title = post.Title,
+                Description= post.Description,
                 Content = post.Content,
                 DateCreated = post.DateCreated,
                 AuthorName = author!.Name,

@@ -5,5 +5,6 @@ namespace backend.DTOs
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public int? userId { get; set; } = null;
+        public string Bios { get; set; } = string.Empty;
     }
 }

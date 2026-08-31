@@ -14,8 +14,10 @@ namespace backendApp.Controllers
         public UserController(AppDbContext context)
         {
             _context = context;
+              
         }
 
+        //Made both GET endpoints because I want to get the users all at once and by their specific Id.
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
@@ -23,7 +25,21 @@ namespace backendApp.Controllers
             return Ok(users);
         }
 
-        [HttpPost]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        [HttpPost("{id}")]
         public async Task<IActionResult> AddUser([FromBody] User user)
         {
             if (user == null)
@@ -35,7 +51,7 @@ namespace backendApp.Controllers
             return Ok(user);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);

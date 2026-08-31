@@ -15,12 +15,30 @@ public class PostController : ControllerBase
         _postService = postService;
     }
 
+
+    //Made both POST endpoints because I want to get the users all at once and by their specific Id.
     [HttpGet]
     public async Task<IActionResult> GetPosts()
     {
         var posts = await _postService.GetPostsAsync();
         return Ok(posts);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetPost(int id)
+    {
+        var post = await _postService.GetPostByIdAsync(id);
+
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(post);
+    }
+
+
+
 
     [Authorize]
     [HttpPost]

@@ -32,7 +32,8 @@ namespace backend.Services
             {
                 Name = dto.Name,
                 Email = dto.Email,
-                PasswordHash = hashedPassword
+                PasswordHash = hashedPassword,
+                Bios = dto.Bios
             };
 
             _context.Users.Add(user);
@@ -57,7 +58,8 @@ namespace backend.Services
             {
                 Token = token,
                 Name = user.Name,
-                Email = user.Email
+                Email = user.Email,
+                Bios = user.Bios
             };
         }
 
