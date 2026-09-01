@@ -61,5 +61,7 @@ namespace backendApp.Controllers
             await _context.SaveChangesAsync();
             return Ok("User deleted successfully");
         }
+
+        //Update endpoint for the users
     }
 }

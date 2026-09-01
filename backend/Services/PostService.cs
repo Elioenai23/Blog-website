@@ -3,6 +3,7 @@ using backend.DTOs;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace backend.Services
 {
     public class PostService : IPostService
@@ -95,7 +96,13 @@ namespace backend.Services
             await _db.SaveChangesAsync();
             return true;
 
-           
+
+        };
+
+        //Not done yet. Supposed to update the users
+        public async Task<PostResponseDto> UpdatePostAsync(Postdto dto, int userId)
+        {
+
         }
         
     }

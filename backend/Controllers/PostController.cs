@@ -61,4 +61,14 @@ public class PostController : ControllerBase
 
         return Ok("Post deleted successfully");
     }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdatePost(PostDto dto) 
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var post = await _postService.UpdatePostAsync(dto, userId);
+
+        return Ok(post);
+    }
+    
 }

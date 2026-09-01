@@ -8,5 +8,6 @@ namespace backend.Services
         Task<PostResponseDto> CreatePostAsync(PostDto dto, int userId);
         Task<bool> DeletePostAsync(int id, int userId);
         Task<PostResponseDto?> GetPostByIdAsync(int id);
+        Task<PostResponseDto?> UpdatePostAsync(PostDto dto, int userId);
     }
 }
