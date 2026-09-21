@@ -14,6 +14,6 @@ namespace backend.Models
         public int SubscribedToId { get; set; }
         public User SubscribedTo { get; set; } = null!;
 
-        public DateTime SubscribedOn { get; set; } = DateTime.UtcNow;
+        public DateTime SubscribedOn { get; set; } = DateTime.UtcNow; // I don't know if this is needed, but it might be useful to know when a user subscribed to another user.
     }
 }

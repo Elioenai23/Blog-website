@@ -10,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 
+
+//Rate limiter
+
+
 //JWT Services
 builder.Services.AddAuthentication(options =>
 {

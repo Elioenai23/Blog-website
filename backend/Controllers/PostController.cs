@@ -37,14 +37,11 @@ public class PostController : ControllerBase
         return Ok(post);
     }
 
-
-
-
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreatePost(PostDto dto)
     {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!); //need to figure out how to implement int.TryParse here to avoid exception if userId is not an int
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!); //need to figure out how to implement int.TryParse here to avoid exception if userId is not an int. I think I solved this? Idk.
         var post = await _postService.CreatePostAsync(dto, userId);
 
 
@@ -62,13 +59,19 @@ public class PostController : ControllerBase
         return Ok("Post deleted successfully");
     }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdatePost(PostDto dto) 
+    //I'm trying to update posts with this endpoint. Maybe update posts by their specific Id, I think that's how you do it but I'm not sure. I need to figure out how to implement this endpoint to update posts by their specific Id.
+    
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdatePostById(int id, PostDto dto)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var post = await _postService.UpdatePostAsync(dto, userId);
-
-        return Ok(post);
+        dto.postId = id; // Set the postId in the DTO to the provided id
+        var updatePost = await _postService.UpdatePostAsync(id, dto, userId);
+        if (updatePost == null)
+        {
+            return NotFound("Post not found or not owned by user");
+        }
+        return Ok(updatePost);
     }
     
 }

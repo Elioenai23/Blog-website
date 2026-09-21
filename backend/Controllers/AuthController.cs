@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 
 [ApiController]
-[Route("api/auth")]
+[Route("api/auth")] //auth route for the authentication endpoints when testing in postman
 
 public class AuthController : ControllerBase
 {
@@ -15,7 +15,7 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost("register")]
+    [HttpPost("register")] // [api/auth/register] route for the registration endpoint when testing in postman
     public async Task<IActionResult> Register(RegisterDto dto)
     {
 
@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpPost("login")]
+    [HttpPost("login")] // [api/auth/login] route for the login endpoint when testing in postman
     public async Task<IActionResult> Login(LoginDto dto)
     {
         var result = await _authService.LoginAsync(dto);

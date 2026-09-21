@@ -63,5 +63,6 @@ namespace backendApp.Controllers
         }
 
         //Update endpoint for the users
+        //Is this even necessary? I don't think it is but I want to make sure. I think this is the endpoint that will allow me to update the users by their specific Id. I need to figure out how to implement this endpoint to update users by their specific Id.
     }
 }

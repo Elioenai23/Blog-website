@@ -4,7 +4,9 @@ namespace backend.DTOs
 
 {
     public class RegisterDto
+
     {
+        // DTO for user registration. This will be used to send the user's registration data from the client to the server.
         [Required]
         public string Name { get; set; } = string.Empty;
 

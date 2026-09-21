@@ -20,13 +20,13 @@ namespace backend.Services
             _configuration = configuration;
         }
 
-        public async Task<string> RegisterAsync(RegisterDto dto)
+        public async Task<string> RegisterAsync(RegisterDto dto) // Register a new user
         {
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password); // Hash the password using BCrypt
 
-            var exists = await _context.Users.AnyAsync(u => u.Email == dto.Email);
+            var exists = await _context.Users.AnyAsync(u => u.Email == dto.Email); // Check if a user with the same email already exists in the database
             if (exists) 
-                throw new Exception("Email already in use");
+                throw new Exception("Email already in use"); // If a user with the same email exists, throw an exception
 
             var user = new User
             {
@@ -36,23 +36,23 @@ namespace backend.Services
                 Bios = dto.Bios
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _context.Users.Add(user); // Add the new user to the database context
+            await _context.SaveChangesAsync(); // Save the new user to the database
 
-            return "User registered successfully";
+            return "User registered successfully"; // Return a success message
 
 
         }
 
 
-        public async Task<AuthResponseDto?> LoginAsync(LoginDto dto)
+        public async Task<AuthResponseDto?> LoginAsync(LoginDto dto) // Login an existing user
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == dto.Email);
+                .FirstOrDefaultAsync(u => u.Email == dto.Email); // Find the user in the database by email
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash)) // Verify the password using BCrypt
                 return null;
-            var token = GenerateJwtToken(user);
+            var token = GenerateJwtToken(user); // Generate a JWT token for the authenticated user
 
             return new AuthResponseDto
             {
@@ -63,7 +63,7 @@ namespace backend.Services
             };
         }
 
-        private string GenerateJwtToken(User user)
+        private string GenerateJwtToken(User user) // Generate a JWT token for the authenticated user
         {
             var jwtSettings = _configuration.GetSection("Jwt");
             var key = new SymmetricSecurityKey(
@@ -86,7 +86,7 @@ namespace backend.Services
                     key, SecurityAlgorithms.HmacSha256)
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new JwtSecurityTokenHandler().WriteToken(token); // Return the generated JWT token as a string
         }
     }
 }

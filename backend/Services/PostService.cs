@@ -15,7 +15,7 @@ namespace backend.Services
             _db = db;
         }
 
-        public async Task<List<PostResponseDto>> GetPostsAsync()
+        public async Task<List<PostResponseDto>> GetPostsAsync() // Retrieve all posts with their associated user, likes, and comments
         {
             return await _db.Posts
                 .Include(p => p.User)
@@ -35,7 +35,7 @@ namespace backend.Services
                 .ToListAsync();
         }
 
-        public async Task<PostResponseDto?> GetPostByIdAsync(int id)
+        public async Task<PostResponseDto?> GetPostByIdAsync(int id) // Retrieve a single post by its ID with its associated user, likes, and comments
         {
             return await _db.Posts
                 .Include(p => p.User)
@@ -56,7 +56,7 @@ namespace backend.Services
         .FirstOrDefaultAsync();
       
         }
-        public async Task<PostResponseDto> CreatePostAsync(PostDto dto, int userId)
+        public async Task<PostResponseDto> CreatePostAsync(PostDto dto, int userId) // Create a new post and return its details
         {
             var post = new Post
             {
@@ -84,7 +84,7 @@ namespace backend.Services
             };
 
         }
-        public async Task<bool> DeletePostAsync(int postId, int userId)
+        public async Task<bool> DeletePostAsync(int postId, int userId) // Delete a post if it exists and belongs to the user
         {
             var post = await _db.Posts.FindAsync(postId);
             if (post == null || post.UserId != userId)
@@ -97,12 +97,36 @@ namespace backend.Services
             return true;
 
 
-        };
+        }
 
-        //Not done yet. Supposed to update the users
-        public async Task<PostResponseDto> UpdatePostAsync(Postdto dto, int userId)
+        //Supposed to update the post
+        public async Task<PostResponseDto> UpdatePostAsync(int id, PostDto dto, int userId)
         {
+            var updatePost = await _db.Posts.FindAsync(id);
+            if (updatePost == null || updatePost.UserId != userId)
+            {
+                return null;
+            }
 
+            updatePost.Title = dto.Title;
+            updatePost.Description = dto.Description;
+            updatePost.Content = dto.Content;
+
+            await _db.SaveChangesAsync();
+
+            var author = await _db.Users.FindAsync(userId);
+
+            return new PostResponseDto
+            {
+                Id = updatePost.Id,
+                Title = updatePost.Title,
+                Description = updatePost.Description,
+                Content = updatePost.Content,
+                DateCreated = updatePost.DateCreated,
+                AuthorName = author!.Name,
+                LikeCount = updatePost.Likes.Count,
+                CommentCount = updatePost.Comments.Count
+            };  
         }
         
     }
